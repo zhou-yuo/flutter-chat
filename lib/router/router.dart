@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
-import '../pages/home.dart';
-import '../pages/user.dart';
+import '../pages/home/home.dart';
+import '../pages/contact/contact.dart';
+import '../pages/user/user.dart';
 
 final router = GoRouter(
   initialLocation: '/',
@@ -10,8 +11,18 @@ final router = GoRouter(
       builder: (context, state) => const HomePage(),
     ),
     GoRoute(
+      path: '/contact',
+      pageBuilder: (context, state) => NoTransitionPage<void>(
+        key: state.pageKey,
+        child: const ContactPage(),
+      ),
+    ),
+    GoRoute(
       path: '/user',
-      builder: (context, state) => const UserPage(),
+      pageBuilder: (context, state) => NoTransitionPage<void>(
+        key: state.pageKey,
+        child: const UserPage(),
+      ),
     )
   ],
 );

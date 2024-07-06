@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../components/bottom_nav_bar.dart';
+import '../../components/bottom_nav_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,11 +13,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColorLight,
-        title: const Text(
-          'Home',
-          style: TextStyle(color: Colors.white),
-        ),
+        title: const Text('Home'),
       ),
       body: const Center(
         child: Text('Home page'),

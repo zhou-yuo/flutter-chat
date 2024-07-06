@@ -14,8 +14,19 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar> {
   int currentIndex = 0;
   List list = [
-    {'index': 0, 'label': 'Home', 'icon': Icons.home, 'path': '/'},
-    {'index': 1, 'label': 'User', 'icon': Icons.account_circle, 'path': '/user'}
+    {'id': 'home', 'label': 'Home', 'icon': Icons.home, 'path': '/'},
+    {
+      'id': 'contact',
+      'label': 'User',
+      'icon': Icons.people,
+      'path': '/contact'
+    },
+    {
+      'od': 'user',
+      'label': 'User',
+      'icon': Icons.account_circle,
+      'path': '/user'
+    }
   ];
   List<BottomNavigationBarItem> navBarItems() {
     return list

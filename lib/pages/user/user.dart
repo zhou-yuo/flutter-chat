@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../components/bottom_nav_bar.dart';
+import '../../components/bottom_nav_bar.dart';
 
 class UserPage extends StatelessWidget {
   const UserPage({super.key});
@@ -8,18 +8,12 @@ class UserPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColorLight,
-        title: const Text(
-          'User',
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
+        title: const Text('User'),
       ),
       body: const Center(
         child: Text('User Page'),
       ),
-      bottomNavigationBar: const BottomNavBar(index: 1),
+      bottomNavigationBar: const BottomNavBar(index: 2),
     );
   }
 }
