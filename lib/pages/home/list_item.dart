@@ -37,11 +37,16 @@ class ListItem extends StatelessWidget {
   /// 头像
   Widget avatarWidget() {
     return Container(
-      padding: const EdgeInsets.all(10),
-      height: 70,
-      width: 70,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(4),
+      decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: Colors.grey.shade300,
+          ),
+          borderRadius: BorderRadius.circular(25)),
+      margin: const EdgeInsets.all(10),
+      height: 50,
+      width: 50,
+      child: ClipOval(
         child: Image.network(avatar),
       ),
     );
