@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-class HomeListItem extends StatelessWidget {
-  final String nickname;
+class ContactListItem extends StatelessWidget {
   final String avatar;
-  final String message;
-  const HomeListItem(this.nickname, this.avatar, this.message, {super.key});
+  final String nickname;
+  const ContactListItem(this.avatar, this.nickname, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +19,11 @@ class HomeListItem extends StatelessWidget {
                 bottom: BorderSide(width: 1, color: Colors.grey.shade300),
               ),
             ),
-            height: 70,
+            height: 60,
             padding: const EdgeInsets.only(right: 10, top: 10, bottom: 10),
             child: Row(
               children: [
                 Expanded(child: infoWidget()),
-                otherWidget(),
               ],
             ),
           ),
@@ -44,22 +42,22 @@ class HomeListItem extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(25)),
       margin: const EdgeInsets.all(10),
-      height: 50,
-      width: 50,
+      height: 40,
+      width: 40,
       child: ClipOval(
-        child: Image.network(avatar),
+        child: Image.network('https://picsum.photos/100/100'),
       ),
     );
   }
 
   /// 主要信息
   Widget infoWidget() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return const Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          nickname,
+          'nickname',
           style: const TextStyle(
             color: Colors.black87,
             fontSize: 14,
@@ -67,26 +65,7 @@ class HomeListItem extends StatelessWidget {
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-        ),
-        Text(
-          message,
-          style: TextStyle(color: Colors.grey.shade400, fontSize: 12),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ],
-    );
-  }
-
-  /// 其他信息（date）
-  Widget otherWidget() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Text(
-          '01-01',
-          style: TextStyle(color: Colors.grey.shade400, fontSize: 12),
-        ),
+        )
       ],
     );
   }
