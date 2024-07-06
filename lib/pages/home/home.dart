@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
     // Response res = await dio.get('article/list/$_currentPage/json');
     // print('get list res ${res.data}');
     List<Map<String, Object>> _newItems =
-        await ListMockData.list(_currentPage, 10);
+        await ListMockData.list(_currentPage, 15);
     setState(() {
       if (_currentPage == 0) {
         _listItems = _newItems;
@@ -58,6 +58,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: EasyRefresh(
         onLoad: () async {
+          print('load...');
           onLoad();
         },
         onRefresh: () async {
@@ -66,7 +67,11 @@ class _HomePageState extends State<HomePage> {
         child: ListView.builder(
           itemCount: _listItems.length,
           itemBuilder: (context, index) {
-            return const ListItem();
+            return ListItem(
+              _listItems[index]['nickname'] as String,
+              _listItems[index]['avatar'] as String,
+              _listItems[index]['message'] as String,
+            );
           },
         ),
       ),
