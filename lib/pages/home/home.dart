@@ -51,6 +51,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(navBarList[_navBarActive]['label']),
+        actions: const <Widget>[Icon(Icons.search)],
       ),
       body: IndexedStack(
         //当前页面索引
