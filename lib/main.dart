@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:animations/animations.dart';
 import './router/router.dart';
 
 void main() {
@@ -33,13 +32,6 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
-      ).copyWith(
-        pageTransitionsTheme: const PageTransitionsTheme(
-          builders: <TargetPlatform, PageTransitionsBuilder>{
-            TargetPlatform.android: FadeThroughPageTransitionsBuilder(),
-            TargetPlatform.iOS: FadeThroughPageTransitionsBuilder(),
-          },
-        ),
       ),
       routerConfig: router,
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
