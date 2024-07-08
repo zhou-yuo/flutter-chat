@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:easy_refresh/easy_refresh.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import './list_data.dart';
 import './list_item.dart';
 
@@ -14,7 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<Map<String, Object>> _listItems = [];
   int _currentPage = 0;
-  final int _listTotal = 20;
+  final int _listTotal = 45;
 
   @override
   void initState() {
@@ -22,11 +22,8 @@ class _HomePageState extends State<HomePage> {
     getList();
   }
 
-  @override
-  void dispose() {
-    _refreshCtrl.dispose();
-    super.dispose();
-  }
+  final RefreshController refreshController =
+      RefreshController(initialRefresh: false);
 
   Future getList() async {
     if (!mounted) return;
@@ -39,7 +36,8 @@ class _HomePageState extends State<HomePage> {
     // print('get list res ${res.data}');
     if (!mounted) return;
     List<Map<String, Object>> _newItems =
-        await HomeListMockData.list(_currentPage, 10);
+        await HomeListMockData.list(_currentPage, 15);
+
     setState(() {
       if (_currentPage == 0) {
         _listItems = _newItems;
@@ -49,66 +47,40 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void onReachBottomLoad() async {
-    if (_listItems.length >= _listTotal) {
-      _refreshCtrl.finishLoad();
-      return;
-    }
-    _currentPage += 1;
-    await getList();
-  }
-
-  void onPullDownRefresh() async {
-    _currentPage = 1;
-    getList();
-  }
-
-  final EasyRefreshController _refreshCtrl = EasyRefreshController();
-
   @override
   Widget build(BuildContext context) {
-    return EasyRefresh(
-      controller: _refreshCtrl,
-      header: ClassicHeader(
-        dragText: '下拉刷新',
-        armedText: '松开后开始刷新',
-        readyText: '正在刷新...',
-        processingText: '正在刷新...',
-        processedText: '刷新完成',
-        messageText: '最后刷新时间 %T',
-        messageStyle: const TextStyle(color: Colors.black54, fontSize: 12),
-        backgroundColor: Colors.grey.shade200,
-      ),
-      footer: const ClassicFooter(
-        dragText: '上拉加载',
-        armedText: '松开后开始加载',
-        readyText: '正在加载...',
-        processingText: '正在加载...',
-        processedText: '加载完成',
-        messageText: '最后加载时间 %T',
-        messageStyle: TextStyle(color: Colors.black54, fontSize: 12),
-      ),
-      onLoad: () async {
+    /// flutter_pulltorefresh SmartRefresher @props
+    /// https://github.com/peng8350/flutter_pulltorefresh/blob/master/propertys.md
+    return SmartRefresher(
+      controller: refreshController,
+      enablePullDown: true,
+      enablePullUp: true,
+      header: const ClassicHeader(),
+      footer: const ClassicFooter(),
+      onLoading: () async {
         // onReactBottomLoad
+        if (!mounted) return;
         if (_listItems.length >= _listTotal) {
+          refreshController.loadNoData();
           return;
         }
 
         _currentPage += 1;
         await getList();
-        print('_listItems.length -> ${_listItems.length}');
-        _refreshCtrl.finishLoad(
-            _listItems.length >= _listTotal
-                ? IndicatorResult.noMore
-                : IndicatorResult.success,
-            true);
+
+        refreshController.loadComplete();
       },
       onRefresh: () async {
         // onPullDownRefresh
-        _currentPage = 1;
+        refreshController.resetNoData();
+
+        setState(() {
+          _listItems = [];
+          _currentPage = 0;
+        });
+
         await getList();
-        _refreshCtrl.finishRefresh(IndicatorResult.success, true);
-        _refreshCtrl.resetFooter();
+        refreshController.refreshCompleted();
       },
       child: ListView.builder(
         itemCount: _listItems.length,

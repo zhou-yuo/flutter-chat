@@ -5,8 +5,7 @@ class HomeListMockData {
       // List 的 generate 方法来构建数组，该方法用于构建指定大小的数组， 可以通过带index输入的回调函数构建对应 index 下标的数组元素。
       return {
         'nickname': 'Nickname-$realIndex',
-        'avatar':
-            'https://picsum.photos/100/100?t=${DateTime.now().microsecondsSinceEpoch}',
+        'avatar': 'https://picsum.photos/100/100',
         'message': 'message-$realIndex',
       };
     });
