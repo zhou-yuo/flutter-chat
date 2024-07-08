@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import './router/router.dart';
 
 void main() {
@@ -13,6 +15,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Flutter Demo',
+      localizationsDelegates: const [
+        // this line is important
+        RefreshLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate
+      ],
+      supportedLocales: const [
+        Locale('zh'),
+        Locale('en'),
+      ],
+      // localeResolutionCallback:
+      //     (Locale locale, Iterable<Locale> supportedLocales) {
+      //   return locale;
+      // },
       theme: ThemeData(
         // This is the theme of your application.
         //
