@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import './list_item.dart';
 import './list_data.dart';
 
-class ContactPageBody extends StatefulWidget {
-  const ContactPageBody({super.key});
+class ContactPage extends StatefulWidget {
+  const ContactPage({super.key});
 
   @override
-  State<ContactPageBody> createState() => _ContactPageBodyState();
+  State<ContactPage> createState() => _ContactPageState();
 }
 
-class _ContactPageBodyState extends State<ContactPageBody> {
+class _ContactPageState extends State<ContactPage> {
   List _listItems = [];
 
   @override
@@ -26,9 +26,9 @@ class _ContactPageBodyState extends State<ContactPageBody> {
     // ));
     // Response res = await dio.get('article/list/$_currentPage/json');
     // print('get list res ${res.data}');
-    List<Map<String, Object>> _newItems = ListMockData.list(0, 20);
+    List<Map<String, Object>> newItems = ListMockData.list(0, 20);
     setState(() {
-      _listItems = _newItems;
+      _listItems = newItems;
     });
   }
 

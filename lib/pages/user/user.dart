@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import '../../components/bottom_nav_bar.dart';
 
-class UserPageBody extends StatefulWidget {
-  const UserPageBody({super.key});
+class UserPage extends StatefulWidget {
+  const UserPage({super.key});
 
   @override
-  State<UserPageBody> createState() => _UserPageBodyState();
+  State<UserPage> createState() => _UserPageState();
 }
 
-class _UserPageBodyState extends State<UserPageBody> {
+class _UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     return Container(

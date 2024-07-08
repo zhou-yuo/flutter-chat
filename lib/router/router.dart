@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import '../pages/home/home.dart';
+import '../pages/layout/layout.dart';
 // import '../pages/contact/contact.dart';
 // import '../pages/user/user.dart';
 
@@ -8,7 +8,7 @@ final router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => const HomePage(),
+      builder: (context, state) => const LayoutPage(),
     ),
     // GoRoute(
     //   path: '/contact',
