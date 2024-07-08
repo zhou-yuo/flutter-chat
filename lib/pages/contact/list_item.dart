@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 
-class ContactListItem extends StatelessWidget {
-  final String avatar;
+class ContactListItem extends StatefulWidget {
   final String nickname;
-  const ContactListItem(this.avatar, this.nickname, {super.key});
+  final String avatar;
+  const ContactListItem(this.nickname, this.avatar, {super.key});
 
+  @override
+  State<ContactListItem> createState() => _ContactListItemState();
+}
+
+class _ContactListItemState extends State<ContactListItem> {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -45,19 +50,19 @@ class ContactListItem extends StatelessWidget {
       height: 40,
       width: 40,
       child: ClipOval(
-        child: Image.network('https://picsum.photos/100/100'),
+        child: Image.network(widget.avatar),
       ),
     );
   }
 
   /// 主要信息
   Widget infoWidget() {
-    return const Column(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'nickname',
+          widget.nickname,
           style: const TextStyle(
             color: Colors.black87,
             fontSize: 14,

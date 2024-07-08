@@ -19,14 +19,14 @@ class _ContactPageState extends State<ContactPage> {
     getList();
   }
 
-  void getList() {
+  void getList() async {
     // Dio dio = Dio(BaseOptions(
     //   baseUrl: 'https://www.wanandroid.com/',
     //   connectTimeout: const Duration(seconds: 60),
     // ));
     // Response res = await dio.get('article/list/$_currentPage/json');
     // print('get list res ${res.data}');
-    List<Map<String, Object>> newItems = ListMockData.list(0, 20);
+    List<Map<String, Object>> newItems = await ContactListMockData.list(0, 20);
     setState(() {
       _listItems = newItems;
     });

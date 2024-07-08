@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
     // print('get list res ${res.data}');
     if (!mounted) return;
     List<Map<String, Object>> _newItems =
-        await ListMockData.list(_currentPage, 10);
+        await HomeListMockData.list(_currentPage, 10);
     setState(() {
       if (_currentPage == 0) {
         _listItems = _newItems;

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import '../../components/bottom_nav_bar.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({super.key});
@@ -39,7 +37,8 @@ class _UserPageState extends State<UserPage> {
           height: 50,
           width: 50,
           child: ClipOval(
-            child: Image.network('https://picsum.photos/100/100'),
+            child: Image.network(
+                'https://picsum.photos/100/100?t=${DateTime.now().microsecondsSinceEpoch}'),
           ),
         ),
         const Expanded(
