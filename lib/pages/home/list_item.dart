@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeListItem extends StatelessWidget {
   final String nickname;
@@ -8,29 +9,32 @@ class HomeListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        avatarWidget(),
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(width: 1, color: Colors.grey.shade300),
+    return InkWell(
+      onTap: () => context.push('/chat'),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          avatarWidget(),
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(width: 1, color: Colors.grey.shade300),
+                ),
+              ),
+              height: 70,
+              padding: const EdgeInsets.only(right: 10, top: 10, bottom: 10),
+              child: Row(
+                children: [
+                  Expanded(child: infoWidget()),
+                  otherWidget(),
+                ],
               ),
             ),
-            height: 70,
-            padding: const EdgeInsets.only(right: 10, top: 10, bottom: 10),
-            child: Row(
-              children: [
-                Expanded(child: infoWidget()),
-                otherWidget(),
-              ],
-            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
