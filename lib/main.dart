@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import './router/router.dart';
 
 void main() {
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         Locale('zh'),
         Locale('en'),
       ],
+      builder: EasyLoading.init(),
       // localeResolutionCallback:
       //     (Locale locale, Iterable<Locale> supportedLocales) {
       //   return locale;

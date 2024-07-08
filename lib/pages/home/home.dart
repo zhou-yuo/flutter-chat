@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import './list_data.dart';
+// import './list_data.dart';
 import './list_item.dart';
+import './friend_json_modal/friend_json_modal.dart';
+import './friend_json_modal/datum.dart';
+import '../../utils/request.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,7 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Map<String, Object>> _listItems = [];
+  List<Datum> _listItems = [];
   int _currentPage = 0;
   final int _listTotal = 45;
 
@@ -27,22 +30,16 @@ class _HomePageState extends State<HomePage> {
 
   Future getList() async {
     if (!mounted) return;
-    await Future.delayed(const Duration(seconds: 1));
-    // Dio dio = Dio(BaseOptions(
-    //   baseUrl: 'https://www.wanandroid.com/',
-    //   connectTimeout: const Duration(seconds: 60),
-    // ));
-    // Response res = await dio.get('article/list/$_currentPage/json');
-    // print('get list res ${res.data}');
-    if (!mounted) return;
-    List<Map<String, Object>> _newItems =
-        await HomeListMockData.list(_currentPage, 15);
+
+    Response res = await Request.send('GET', 'friend/json');
+    FriendJsonModal resData = FriendJsonModal.fromJson(res.data);
+    List<Datum> newItems = resData.data ?? [];
 
     setState(() {
       if (_currentPage == 0) {
-        _listItems = _newItems;
+        _listItems = newItems;
       } else {
-        _listItems += _newItems;
+        _listItems += newItems;
       }
     });
   }
@@ -86,9 +83,10 @@ class _HomePageState extends State<HomePage> {
         itemCount: _listItems.length,
         itemBuilder: (context, index) {
           return HomeListItem(
-            _listItems[index]['nickname'] as String,
-            _listItems[index]['avatar'] as String,
-            _listItems[index]['message'] as String,
+            _listItems[index].name as String,
+            // _listItems[index]['avatar'] as String,
+            'https://picsum.photos/100/100',
+            _listItems[index].link as String,
           );
         },
       ),
