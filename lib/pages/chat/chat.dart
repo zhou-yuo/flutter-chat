@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import './record_view.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -24,9 +25,7 @@ class _ChatPageState extends State<ChatPage> {
             child: Column(
               children: [
                 const Expanded(
-                  child: Center(
-                    child: Text('page view'),
-                  ),
+                  child: ChatRecordView(),
                 ),
                 Container(
                   width: double.infinity,
@@ -62,6 +61,9 @@ class _ChatPageState extends State<ChatPage> {
   /// input ctrl
   final TextEditingController _inputController = TextEditingController();
 
+  /// input scroll ctrl
+  final ScrollController _inputScrollController = ScrollController();
+
   /// 发送模块
   Widget sendCtrl() {
     return Row(
@@ -75,6 +77,7 @@ class _ChatPageState extends State<ChatPage> {
             ),
             child: TextField(
               controller: _inputController,
+              scrollController: _inputScrollController,
               keyboardType: TextInputType.multiline,
               maxLines: null,
               // textInputAction: TextInputAction.go,
@@ -155,6 +158,7 @@ class _ChatPageState extends State<ChatPage> {
       offstage: !emojiPickerVisible,
       child: EmojiPicker(
         textEditingController: _inputController,
+        scrollController: _inputScrollController,
         config: Config(
           height: 256,
           // Whether to filter out glyphs that platform cannot render with the default font (Android).
