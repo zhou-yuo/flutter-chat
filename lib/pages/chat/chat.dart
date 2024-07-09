@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import './record_view.dart';
+import './record_data.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -11,11 +12,18 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+  final RecordViewController _recordViewCtrl = RecordViewController();
+
   /// input ctrl
   final TextEditingController _inputController = TextEditingController();
 
   /// input scroll ctrl
   final ScrollController _inputScrollController = ScrollController();
+
+  // 第一次 add
+  bool firstAdd = false;
+  // 聊天记录
+  List<Map<String, Object>> recordList = [];
 
   @override
   void dispose() {
@@ -37,8 +45,9 @@ class _ChatPageState extends State<ChatPage> {
             ),
             child: Column(
               children: [
-                const Expanded(
-                  child: ChatRecordView(),
+                Expanded(
+                  child: ChatRecordView(
+                      controller: _recordViewCtrl, list: recordList),
                 ),
                 Container(
                   width: double.infinity,
@@ -127,11 +136,31 @@ class _ChatPageState extends State<ChatPage> {
 
   //  发送事件
   void handleSend() {
-    print('_inputController.text : ${_inputController.text}');
     // 清空 input
+    String inputVal = _inputController.text;
+    // print('_inputController.text : $inputVal');
+
     _inputController.clear();
+    setState(() {
+      if (firstAdd) {
+        recordList.add({
+          "id": DateTime.now().millisecondsSinceEpoch,
+          'type': 'date',
+        });
+      }
+      recordList.add({
+        "id": DateTime.now().millisecondsSinceEpoch,
+        'type': 'text',
+        "text": inputVal,
+        "isSender": true,
+        "sent": true,
+        "seen": false,
+      });
+    });
+    // 关闭 emoji picker
+    emojiPickerVisible = false;
     // record scroll 滚动到最底部
-    // chatRecordViewKey.scrollToEnd();
+    // _recordViewCtrl.scrollToEnd();
   }
 
   Widget mediaCtrl() {

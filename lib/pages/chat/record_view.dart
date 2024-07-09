@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 
+class RecordViewController {
+  void Function() scrollToEnd = () {};
+}
+
 class ChatRecordView extends StatefulWidget {
-  const ChatRecordView({super.key});
+  // 组件 controller
+  final RecordViewController controller;
+  // 列表传参
+  final List<Map<String, Object>> list;
+
+  const ChatRecordView(
+      {super.key, required this.controller, required this.list});
 
   @override
   State<ChatRecordView> createState() => _ChatRecordViewState();
@@ -10,18 +20,73 @@ class ChatRecordView extends StatefulWidget {
 
 class _ChatRecordViewState extends State<ChatRecordView> {
   final now = DateTime.now();
-
   ScrollController scrollController = ScrollController();
 
-  void scrollToEnd() {
-    print('scrollToEnd');
-    scrollController.jumpTo(scrollController.position.maxScrollExtent);
+  void _scrollToEnd() {
+    // print('scrollToEnd ${DateTime.now().millisecondsSinceEpoch}');
+    if (mounted) {
+      scrollController.jumpTo(scrollController.position.maxScrollExtent);
+    }
+  }
+
+  List<Widget> _listView() {
+    return widget.list.map((item) {
+      switch (item['type']) {
+        case 'date':
+          return DateChip(
+            date: DateTime(now.year, now.month, now.day - 2),
+            color: Colors.grey.shade300,
+          );
+        case 'text':
+        default:
+          return BubbleNormal(
+            text: item['text'] as String,
+            isSender: item['isSender'] as bool,
+            color: item['isSender'] as bool ? Colors.blue : Colors.white,
+            textStyle: TextStyle(
+              fontSize: 14,
+              color: item['isSender'] as bool ? Colors.white : Colors.black87,
+            ),
+            tail: true,
+            sent: item['sent'] as bool,
+            // delivered: true,
+            seen: item['seen'] as bool,
+          );
+      }
+    }).toList();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.scrollToEnd = _scrollToEnd;
+
+    /// Flutter 监听页面渲染完毕回调
+    /// https://blog.csdn.net/lxd_love_lgc/article/details/105724069
+    // WidgetsBinding.instance.addPostFrameCallback((mag) {
+    //   _scrollToEnd();
+    // });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  /// 解决复制后渲染问题
+  /// 来源： https://stackoverflow.com/questions/51216448/is-there-any-callback-to-tell-me-when-build-function-is-done-in-flutter
+  Future<void> _runsAfterBuild() async {
+    await Future.delayed(Duration.zero);
+    _scrollToEnd();
   }
 
   @override
   Widget build(BuildContext context) {
+    _runsAfterBuild();
+
     return SingleChildScrollView(
       controller: scrollController,
+      // reverse: true,
       child: Column(
         children: [
           const SizedBox(
@@ -31,10 +96,14 @@ class _ChatRecordViewState extends State<ChatRecordView> {
             text: 'BubbleNormal 1',
             isSender: true,
             color: Colors.blue,
+            textStyle: const TextStyle(
+              fontSize: 14,
+              color: Colors.white,
+            ),
             tail: false,
             sent: true,
             delivered: true,
-            seen: true,
+            seen: false,
           ),
           BubbleNormal(
             text: 'BubbleNormal 2 tail',
@@ -131,6 +200,9 @@ class _ChatRecordViewState extends State<ChatRecordView> {
               color: Colors.black87,
             ),
             tail: true,
+          ),
+          Column(
+            children: _listView(),
           ),
           const SizedBox(
             height: 10,
