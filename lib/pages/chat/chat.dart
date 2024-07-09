@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:web_socket_channel/status.dart' as status;
+import 'package:web_socket_channel/web_socket_channel.dart';
 import './record_view.dart';
 import './record_data.dart';
 
@@ -24,6 +26,36 @@ class _ChatPageState extends State<ChatPage> {
   bool firstAdd = false;
   // 聊天记录
   List<Map<String, Object>> recordList = [];
+
+  static final wsUrl = Uri.parse('wss://echo.websocket.events');
+  late final channel;
+
+  void initSocket() async {
+    channel = WebSocketChannel.connect(wsUrl);
+    await channel.ready;
+    print('channel.ready');
+
+    channel.stream.listen((message) {
+      print('message - $message');
+      recordList.add({
+        "id": DateTime.now().millisecondsSinceEpoch,
+        'type': 'text',
+        "text": message,
+        "isSender": false,
+        "sent": false,
+        "seen": false,
+      });
+      setState(() {});
+      // channel.sink.add('received!');
+      // channel.sink.close(status.goingAway);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initSocket();
+  }
 
   @override
   void dispose() {
@@ -139,6 +171,8 @@ class _ChatPageState extends State<ChatPage> {
     // 清空 input
     String inputVal = _inputController.text;
     // print('_inputController.text : $inputVal');
+
+    channel.sink.add(inputVal);
 
     _inputController.clear();
     setState(() {
