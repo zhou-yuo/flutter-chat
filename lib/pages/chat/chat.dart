@@ -27,10 +27,10 @@ class _ChatPageState extends State<ChatPage> {
   // 聊天记录
   List<Map<String, Object>> recordList = [];
 
-  static final wsUrl = Uri.parse('wss://echo.websocket.events');
   late final channel;
 
   void initSocket() async {
+    final wsUrl = Uri.parse('wss://echo.websocket.events');
     channel = WebSocketChannel.connect(wsUrl);
     await channel.ready;
     print('channel.ready');
@@ -59,6 +59,7 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   void dispose() {
+    channel.sink.close();
     _inputController.dispose();
     _inputScrollController.dispose();
     super.dispose();
