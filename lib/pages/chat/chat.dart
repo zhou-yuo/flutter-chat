@@ -11,6 +11,19 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+  /// input ctrl
+  final TextEditingController _inputController = TextEditingController();
+
+  /// input scroll ctrl
+  final ScrollController _inputScrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _inputController.dispose();
+    _inputScrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,8 +52,8 @@ class _ChatPageState extends State<ChatPage> {
                   child: Column(
                     children: [
                       Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 15),
                         child: Column(
                           children: [
                             sendCtrl(),
@@ -57,12 +70,6 @@ class _ChatPageState extends State<ChatPage> {
       ),
     );
   }
-
-  /// input ctrl
-  final TextEditingController _inputController = TextEditingController();
-
-  /// input scroll ctrl
-  final ScrollController _inputScrollController = ScrollController();
 
   /// 发送模块
   Widget sendCtrl() {
@@ -95,24 +102,36 @@ class _ChatPageState extends State<ChatPage> {
             ),
           ),
         ),
-        Container(
-          width: 32,
-          height: 32,
-          margin: const EdgeInsets.only(left: 12),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            color: Colors.blue,
-          ),
-          child: const Center(
-            child: Icon(
-              Icons.send,
-              color: Colors.white,
-              size: 18,
+        InkWell(
+          onTap: handleSend,
+          child: Container(
+            width: 32,
+            height: 32,
+            margin: const EdgeInsets.only(left: 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: Colors.blue,
+            ),
+            child: const Center(
+              child: Icon(
+                Icons.send,
+                color: Colors.white,
+                size: 18,
+              ),
             ),
           ),
-        )
+        ),
       ],
     );
+  }
+
+  //  发送事件
+  void handleSend() {
+    print('_inputController.text : ${_inputController.text}');
+    // 清空 input
+    _inputController.clear();
+    // record scroll 滚动到最底部
+    // chatRecordViewKey.scrollToEnd();
   }
 
   Widget mediaCtrl() {

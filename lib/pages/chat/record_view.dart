@@ -11,9 +11,17 @@ class ChatRecordView extends StatefulWidget {
 class _ChatRecordViewState extends State<ChatRecordView> {
   final now = DateTime.now();
 
+  ScrollController scrollController = ScrollController();
+
+  void scrollToEnd() {
+    print('scrollToEnd');
+    scrollController.jumpTo(scrollController.position.maxScrollExtent);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      controller: scrollController,
       child: Column(
         children: [
           const SizedBox(
