@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import '../../components/cell_item/cell_item.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({super.key});
@@ -16,7 +18,8 @@ class _UserPageState extends State<UserPage> {
       child: Column(
         children: [
           userinfoWidget(),
-          cellsWidget(),
+          cellsWidget(_powerList),
+          cellsWidget(_handleList),
         ],
       ),
     );
@@ -74,44 +77,38 @@ class _UserPageState extends State<UserPage> {
     );
   }
 
-  final List _cellList = [
-    {'label': '账号管理'},
-    {'label': '检查更新'},
-    {'label': '关于我们'},
-    {'label': '退出登录'},
+  final List _powerList = [
+    {'id': 'accounnt', 'label': '账号管理'},
+    {'id': 'update', 'label': '检查更新'},
+    {'id': 'about', 'label': '关于我们', 'border': false},
   ];
 
-  List<Widget> _cellItems() {
+  final List _handleList = [
+    {
+      'id': 'logout',
+      'label': '退出登录',
+      'center': true,
+      'border': false,
+      'color': Colors.red
+    },
+  ];
+
+  List<Widget> _cellItems(List cellList) {
     List<Widget> items = [];
-    for (int i = 0; i < _cellList.length; i++) {
-      items.add(Container(
-        height: 50,
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: i + 1 == _cellList.length
-                ? BorderSide.none
-                : BorderSide(width: 1, color: Colors.grey.shade200),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(_cellList[i]['label']),
-            Icon(
-              Icons.arrow_forward_ios_rounded,
-              size: 18,
-              color: Colors.grey.shade400,
-            ),
-          ],
-        ),
+    for (int i = 0; i < cellList.length; i++) {
+      final itemData = cellList[i];
+      items.add(CommonCellItem(
+        itemData,
+        center: itemData['center'] ?? false,
+        border: itemData['border'] ?? true,
+        color: itemData['color'],
+        onTapCb: cellItemTap,
       ));
     }
     return items;
   }
 
-  Widget cellsWidget() {
+  Widget cellsWidget(List list) {
     return Container(
       margin: const EdgeInsets.only(top: 30),
       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -120,8 +117,13 @@ class _UserPageState extends State<UserPage> {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
-        children: _cellItems(),
+        children: _cellItems(list),
       ),
     );
+  }
+
+  cellItemTap(item) {
+    debugPrint('cellItemTap, ${item['id']}');
+    EasyLoading.showToast("${item['label']}");
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import '../../components/cell_item/cell_item.dart';
 
 class ContactDetailsPage extends StatefulWidget {
   const ContactDetailsPage({super.key});
@@ -44,7 +46,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
         borderRadius: BorderRadius.circular(8),
       ),
       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
-      margin: EdgeInsets.only(bottom: 15),
+      margin: const EdgeInsets.only(bottom: 15),
       child: child,
     );
   }
@@ -102,56 +104,32 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
 
   final List _handleList = [
     {'id': 'chat', 'label': '发送消息'},
-    {'id': 'delete', 'label': '删除好友'},
+    {'id': 'delete', 'label': '删除好友', 'color': Colors.red},
   ];
 
   List<Widget> cellItems(List cellList, {bool? center}) {
     List<Widget> items = [];
     for (int i = 0; i < cellList.length; i++) {
       final item = cellList[i];
+      late final dynamic child;
+      switch (item['id']) {
+        case 'mute':
+          child = muteSwitch();
+          break;
+        case 'top':
+          child = topSwitch();
+          break;
+        default:
+          child = null;
+      }
+
       items.add(
-        InkWell(
-          onTap: () {
-            debugPrint('onTap');
-            cellItemTap(item);
-          },
-          child: Container(
-            height: 46,
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: i + 1 == cellList.length
-                    ? BorderSide.none
-                    : BorderSide(width: 1, color: Colors.grey.shade200),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: center == true
-                  ? MainAxisAlignment.center
-                  : MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  item['label'],
-                  style: TextStyle(
-                    color: item['id'] == 'delete' ? Colors.red : Colors.black,
-                  ),
-                ),
-                Offstage(
-                  offstage: center == true,
-                  child: item['id'] == 'mute'
-                      ? muteSwitch()
-                      : item['id'] == 'top'
-                          ? topSwitch()
-                          : Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              size: 18,
-                              color: Colors.grey.shade400,
-                            ),
-                ),
-              ],
-            ),
-          ),
+        CommonCellItem(
+          item,
+          center: center,
+          color: item['color'],
+          child: child,
+          onTapCb: cellItemTap,
         ),
       );
     }
@@ -165,6 +143,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
         context.push('/chat');
         break;
     }
+    EasyLoading.showToast("${item['label']}");
   }
 
   bool muteFlag = false;
