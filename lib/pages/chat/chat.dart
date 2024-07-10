@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:web_socket_channel/status.dart' as status;
-import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '../../utils/websocket.dart';
 import './record_view.dart';
-import './record_data.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -22,32 +23,20 @@ class _ChatPageState extends State<ChatPage> {
   /// input scroll ctrl
   final ScrollController _inputScrollController = ScrollController();
 
-  // 第一次 add
-  bool firstAdd = false;
   // 聊天记录
   List<Map<String, Object>> recordList = [];
 
-  late final channel;
+  late final wsChannel;
 
   void initSocket() async {
-    final wsUrl = Uri.parse('wss://echo.websocket.events');
-    channel = WebSocketChannel.connect(wsUrl);
-    await channel.ready;
-    print('channel.ready');
-
-    channel.stream.listen((message) {
-      // print('message - $message');
-      recordList.add({
-        "id": DateTime.now().millisecondsSinceEpoch,
-        'type': 'text',
-        "text": message,
-        "isSender": false,
-        "sent": false,
-        "seen": false,
-      });
-      setState(() {});
-      // channel.sink.add('received!');
-      // channel.sink.close(status.goingAway);
+    wsChannel = WebSocketUtility();
+    wsChannel.initWebSocket(onOpen: () {
+      WebSocketUtility().initHeartBeat();
+    }, onMessage: (data) {
+      print('onMessage $data');
+      pushMsg(text: data, isSender: false);
+    }, onError: (e) {
+      print('onError $e');
     });
   }
 
@@ -59,7 +48,7 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   void dispose() {
-    channel.sink.close();
+    wsChannel.closeSocket();
     _inputController.dispose();
     _inputScrollController.dispose();
     super.dispose();
@@ -173,29 +162,32 @@ class _ChatPageState extends State<ChatPage> {
     String inputVal = _inputController.text;
     // print('_inputController.text : $inputVal');
 
-    channel.sink.add(inputVal);
+    wsChannel.sendMessage(inputVal);
 
     _inputController.clear();
-    setState(() {
-      if (firstAdd) {
-        recordList.add({
-          "id": DateTime.now().millisecondsSinceEpoch,
-          'type': 'date',
-        });
-      }
-      recordList.add({
-        "id": DateTime.now().millisecondsSinceEpoch,
-        'type': 'text',
-        "text": inputVal,
-        "isSender": true,
-        "sent": true,
-        "seen": false,
-      });
-    });
+    pushMsg(text: inputVal, isSender: true);
     // 关闭 emoji picker
     emojiPickerVisible = false;
     // record scroll 滚动到最底部
     // _recordViewCtrl.scrollToEnd();
+  }
+
+  // push list
+  void pushMsg({required String text, required bool isSender}) {
+    if (!mounted) return;
+    recordList.add({
+      "id": DateTime.now().millisecondsSinceEpoch,
+      'type': 'date',
+    });
+    recordList.add({
+      "id": DateTime.now().millisecondsSinceEpoch,
+      'type': 'text',
+      "text": text,
+      "isSender": isSender,
+      "sent": isSender,
+      "seen": false,
+    });
+    setState(() {});
   }
 
   Widget mediaCtrl() {
@@ -205,7 +197,10 @@ class _ChatPageState extends State<ChatPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          mediaIcon(Icons.image_outlined),
+          InkWell(
+            onTap: handleImage,
+            child: mediaIcon(Icons.image_outlined),
+          ),
           InkWell(
             onTap: handleEmoji,
             child: mediaIcon(emojiPickerVisible
@@ -229,10 +224,30 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   bool emojiPickerVisible = false;
+  // 打开 emoji
   void handleEmoji() {
     setState(() {
       emojiPickerVisible = !emojiPickerVisible;
     });
+  }
+
+  // 选择图片
+  void handleImage() async {
+    final picker = ImagePicker();
+    final XFile? pickedFile =
+        await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile == null) return;
+    print(pickedFile);
+
+    // var formData = FormData();
+    // formData.files.add(MapEntry(
+    //   "files", // 后台接收的名字
+    //   MultipartFile.fromFileSync(pickedFile.path, filename: pickedFile.name),
+    // ));
+    final formData = FormData.fromMap({
+      'files': MultipartFile.fromFileSync(pickedFile.path),
+    });
+    debugPrint('formData $formData');
   }
 
   /// emoji picker
