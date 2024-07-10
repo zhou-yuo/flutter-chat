@@ -37,8 +37,7 @@ class _UserPageState extends State<UserPage> {
           height: 50,
           width: 50,
           child: ClipOval(
-            child: Image.network(
-                'https://picsum.photos/100/100?t=${DateTime.now().microsecondsSinceEpoch}'),
+            child: Image.network('https://picsum.photos/100/100'),
           ),
         ),
         const Expanded(
@@ -77,6 +76,8 @@ class _UserPageState extends State<UserPage> {
 
   final List _cellList = [
     {'label': '账号管理'},
+    {'label': '检查更新'},
+    {'label': '关于我们'},
     {'label': '退出登录'},
   ];
 
@@ -94,9 +95,16 @@ class _UserPageState extends State<UserPage> {
           ),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [Text(_cellList[i]['label'])],
+          children: [
+            Text(_cellList[i]['label']),
+            Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 18,
+              color: Colors.grey.shade400,
+            ),
+          ],
         ),
       ));
     }

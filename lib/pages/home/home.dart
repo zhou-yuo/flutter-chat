@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-// import './list_data.dart';
 import './list_item.dart';
 import './friend_json_modal/friend_json_modal.dart';
 import './friend_json_modal/datum.dart';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ContactListItem extends StatefulWidget {
   final String nickname;
@@ -12,28 +13,31 @@ class ContactListItem extends StatefulWidget {
 class _ContactListItemState extends State<ContactListItem> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        avatarWidget(),
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(width: 1, color: Colors.grey.shade300),
+    return InkWell(
+      onTap: () => context.push('/details'),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          avatarWidget(),
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(width: 1, color: Colors.grey.shade300),
+                ),
+              ),
+              height: 60,
+              padding: const EdgeInsets.only(right: 10, top: 10, bottom: 10),
+              child: Row(
+                children: [
+                  Expanded(child: infoWidget()),
+                ],
               ),
             ),
-            height: 60,
-            padding: const EdgeInsets.only(right: 10, top: 10, bottom: 10),
-            child: Row(
-              children: [
-                Expanded(child: infoWidget()),
-              ],
-            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
