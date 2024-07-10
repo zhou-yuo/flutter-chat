@@ -36,7 +36,7 @@ class _ChatPageState extends State<ChatPage> {
     print('channel.ready');
 
     channel.stream.listen((message) {
-      print('message - $message');
+      // print('message - $message');
       recordList.add({
         "id": DateTime.now().millisecondsSinceEpoch,
         'type': 'text',
