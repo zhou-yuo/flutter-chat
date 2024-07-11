@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import './components/common_input.dart';
 import './components/common_btn.dart';
@@ -18,6 +19,29 @@ class _RegistPageState extends State<RegistPage> {
   final TextEditingController pwdController = TextEditingController();
   // 推荐码
   final TextEditingController referralCodeController = TextEditingController();
+
+  void handleRegist() {
+    final Map form = {
+      'account': accountController.text.trim(),
+      'password': pwdController.text.trim(),
+      'referralCode': referralCodeController.text.trim()
+    };
+    debugPrint('form account ${form['account']}');
+    debugPrint('form password ${form['password']}');
+    if (!form['account']?.isNotEmpty || form['account'] == null) {
+      EasyLoading.showToast('请输入账号');
+      return;
+    }
+    if (!form['password']?.isNotEmpty || form['password'] == null) {
+      EasyLoading.showToast('请输入密码');
+      return;
+    }
+    if (!form['referralCode']?.isNotEmpty || form['referralCode'] == null) {
+      EasyLoading.showToast('请输入推荐码');
+      return;
+    }
+    SharedManager.toLogin(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +87,10 @@ class _RegistPageState extends State<RegistPage> {
                     const SizedBox(height: 15),
                     LoginInput(referralCodeController, hintText: '请输入推荐码'),
                     const SizedBox(height: 15),
-                    const LoginBtn('注册'),
+                    LoginBtn(
+                      '注册',
+                      handleTap: handleRegist,
+                    ),
                     const SizedBox(height: 10),
                     LoginBtn(
                       '登录',

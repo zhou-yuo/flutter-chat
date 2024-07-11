@@ -16,8 +16,8 @@ final router = GoRouter(
     final bool isLogin = SharedManager().isLogin();
     // 白名单
     const whiteList = ['/login', '/regist', '/forgetPassword'];
-
     if (!isLogin && !whiteList.contains(state.fullPath)) {
+      debugPrint('to login');
       return '/login';
     } else {
       return null;

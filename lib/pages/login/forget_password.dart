@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import './components/common_input.dart';
 import './components/common_btn.dart';
@@ -15,9 +16,33 @@ class ForgetPasswordPage extends StatefulWidget {
 
 class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   final TextEditingController accountController = TextEditingController();
-  final TextEditingController pwdController = TextEditingController();
   // 验证码
   final TextEditingController codeController = TextEditingController();
+  final TextEditingController pwdController = TextEditingController();
+
+  void handleReset() {
+    final Map form = {
+      'account': accountController.text.trim(),
+      'code': codeController.text.trim(),
+      'password': pwdController.text.trim(),
+    };
+    debugPrint('form account ${form['account']}');
+    debugPrint('form password ${form['password']}');
+    if (!form['account']?.isNotEmpty || form['account'] == null) {
+      EasyLoading.showToast('请输入账号');
+      return;
+    }
+    if (!form['code']?.isNotEmpty || form['code'] == null) {
+      EasyLoading.showToast('请输入验证码');
+      return;
+    }
+    if (!form['password']?.isNotEmpty || form['password'] == null) {
+      EasyLoading.showToast('请输入密码');
+      return;
+    }
+
+    SharedManager.toLogin(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +73,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const Text(
-                      '注册',
+                      '忘记密码',
                       style: TextStyle(
                         color: Colors.black87,
                         fontWeight: FontWeight.bold,
@@ -63,7 +88,10 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                     LoginInput(pwdController,
                         hintText: '请输入新密码', obscureText: true),
                     const SizedBox(height: 15),
-                    const LoginBtn('重置密码'),
+                    LoginBtn(
+                      '重置密码',
+                      handleTap: handleReset,
+                    ),
                     const SizedBox(height: 10),
                     LoginBtn(
                       '登录',

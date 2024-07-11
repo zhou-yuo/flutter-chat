@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import './components/common_input.dart';
 import './components/common_btn.dart';
@@ -18,6 +19,26 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController accountController = TextEditingController();
   final TextEditingController pwdController = TextEditingController();
 
+  void handleLogin() {
+    final Map form = {
+      'account': accountController.text.trim(),
+      'password': pwdController.text.trim()
+    };
+    debugPrint('form account ${form['account']}');
+    debugPrint('form password ${form['password']}');
+    if (!form['account']?.isNotEmpty || form['account'] == null) {
+      EasyLoading.showToast('请输入账号');
+      return;
+    }
+    if (!form['password']?.isNotEmpty || form['password'] == null) {
+      EasyLoading.showToast('请输入密码');
+      return;
+    }
+    SharedManager().setToken('${DateTime.now().microsecondsSinceEpoch}');
+    context.go('/');
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       // appBar: AppBar(
@@ -67,7 +88,10 @@ class _LoginPageState extends State<LoginPage> {
                     LoginInput(pwdController,
                         hintText: '请输入密码', obscureText: true),
                     const SizedBox(height: 15),
-                    const LoginBtn('登录'),
+                    LoginBtn(
+                      '登录',
+                      handleTap: handleLogin,
+                    ),
                     const SizedBox(height: 10),
                     LoginBtn(
                       '注册',

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../../components/cell_item/cell_item.dart';
+import '../../utils/shared_manage.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({super.key});
@@ -125,5 +126,10 @@ class _UserPageState extends State<UserPage> {
   cellItemTap(item) {
     debugPrint('cellItemTap, ${item['id']}');
     EasyLoading.showToast("${item['label']}");
+    switch (item['id']) {
+      case 'logout':
+        SharedManager().logout(context);
+        break;
+    }
   }
 }
