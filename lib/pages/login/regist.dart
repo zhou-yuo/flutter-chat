@@ -1,12 +1,10 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 import './components/common_input.dart';
 import './components/common_btn.dart';
 import '../../components/backdrop_filter_blur/backdrop_filter_blur.dart';
 
-import '../../utils/shared.dart';
+import '../../utils/shared_manage.dart';
 
 class RegistPage extends StatefulWidget {
   const RegistPage({super.key});
@@ -32,7 +30,7 @@ class _RegistPageState extends State<RegistPage> {
           padding: const EdgeInsets.all(10),
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/images/chat_bg.jpg'),
+              image: AssetImage('assets/images/bg.jpg'),
               repeat: ImageRepeat.repeat,
             ),
           ),
@@ -44,15 +42,7 @@ class _RegistPageState extends State<RegistPage> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 40, horizontal: 30),
                 decoration: BoxDecoration(
-                  // color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
-                  // boxShadow: const [
-                  //   BoxShadow(
-                  //     color: Color.fromRGBO(0, 0, 0, 0.5),
-                  //     offset: Offset(4, 4),
-                  //     blurRadius: 4,
-                  //   )
-                  // ],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -68,7 +58,8 @@ class _RegistPageState extends State<RegistPage> {
                     const SizedBox(height: 20),
                     LoginInput(accountController, hintText: '请输入账号'),
                     const SizedBox(height: 15),
-                    LoginInput(pwdController, hintText: '请输入密码'),
+                    LoginInput(pwdController,
+                        hintText: '请输入密码', obscureText: true),
                     const SizedBox(height: 15),
                     LoginInput(referralCodeController, hintText: '请输入推荐码'),
                     const SizedBox(height: 15),
@@ -77,7 +68,7 @@ class _RegistPageState extends State<RegistPage> {
                     LoginBtn(
                       '登录',
                       type: LoginButtonType.outline,
-                      handleTap: () => Shared.toLogin(context),
+                      handleTap: () => SharedManager.toLogin(context),
                     ),
                   ],
                 ),

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import './components/common_input.dart';
 import './components/common_btn.dart';
 import '../../components/backdrop_filter_blur/backdrop_filter_blur.dart';
 
-import '../../utils/shared.dart';
+import '../../utils/shared_manage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -27,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
           padding: const EdgeInsets.all(10),
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/images/chat_bg.jpg'),
+              image: AssetImage('assets/images/bg.jpg'),
               repeat: ImageRepeat.repeat,
             ),
           ),
@@ -63,17 +64,24 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 20),
                     LoginInput(accountController, hintText: '请输入账号'),
                     const SizedBox(height: 15),
-                    LoginInput(pwdController, hintText: '请输入密码'),
+                    LoginInput(pwdController,
+                        hintText: '请输入密码', obscureText: true),
                     const SizedBox(height: 15),
                     const LoginBtn('登录'),
                     const SizedBox(height: 10),
                     LoginBtn(
                       '注册',
                       type: LoginButtonType.outline,
-                      handleTap: () => Shared.toRegist(context),
+                      handleTap: () => SharedManager.toRegist(context),
                     ),
                     const SizedBox(height: 10),
-                    const LoginBtn('忘记密码', type: LoginButtonType.text),
+                    LoginBtn(
+                      '忘记密码',
+                      type: LoginButtonType.text,
+                      handleTap: () {
+                        context.go('/forgetPassword');
+                      },
+                    ),
                   ],
                 ),
               ),

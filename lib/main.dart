@@ -3,8 +3,11 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import './router/router.dart';
+import './utils/shared_manage.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SharedManager().init();
   runApp(const MyApp());
 }
 
