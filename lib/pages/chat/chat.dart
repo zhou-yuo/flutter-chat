@@ -64,6 +64,10 @@ class _ChatPageState extends State<ChatPage> {
         child: Container(
             decoration: BoxDecoration(
               color: Colors.grey.shade200,
+              image: const DecorationImage(
+                image: AssetImage('assets/images/bg.jpg'),
+                repeat: ImageRepeat.repeat,
+              ),
             ),
             child: Column(
               children: [
