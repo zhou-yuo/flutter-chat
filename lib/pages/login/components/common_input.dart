@@ -35,7 +35,7 @@ class _LoginInputState extends State<LoginInput> {
           color: Colors.black87,
         ),
         maxLines: 1,
-        maxLength: 11,
+        maxLength: 16,
       ),
     );
   }

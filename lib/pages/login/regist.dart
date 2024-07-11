@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import './components/common_input.dart';
@@ -6,21 +8,24 @@ import '../../components/backdrop_filter_blur/backdrop_filter_blur.dart';
 
 import '../../utils/shared.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegistPage extends StatefulWidget {
+  const RegistPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegistPage> createState() => _RegistPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegistPageState extends State<RegistPage> {
   final TextEditingController accountController = TextEditingController();
   final TextEditingController pwdController = TextEditingController();
+  // 推荐码
+  final TextEditingController referralCodeController = TextEditingController();
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       // appBar: AppBar(
-      //   title: const Text('登录'),
+      //   title: const Text('注册'),
       // ),
       body: SafeArea(
         child: Container(
@@ -35,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
             child: BackdropFilterBlur(
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.8,
-                height: 350,
+                height: 380,
                 padding:
                     const EdgeInsets.symmetric(vertical: 40, horizontal: 30),
                 decoration: BoxDecoration(
@@ -53,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const Text(
-                      '登录',
+                      '注册',
                       style: TextStyle(
                         color: Colors.black87,
                         fontWeight: FontWeight.bold,
@@ -65,15 +70,15 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 15),
                     LoginInput(pwdController, hintText: '请输入密码'),
                     const SizedBox(height: 15),
-                    const LoginBtn('登录'),
+                    LoginInput(referralCodeController, hintText: '请输入推荐码'),
+                    const SizedBox(height: 15),
+                    const LoginBtn('注册'),
                     const SizedBox(height: 10),
                     LoginBtn(
-                      '注册',
+                      '登录',
                       type: LoginButtonType.outline,
-                      handleTap: () => Shared.toRegist(context),
+                      handleTap: () => Shared.toLogin(context),
                     ),
-                    const SizedBox(height: 10),
-                    const LoginBtn('忘记密码', type: LoginButtonType.text),
                   ],
                 ),
               ),
