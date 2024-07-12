@@ -23,10 +23,9 @@ class _ChatRecordViewState extends State<ChatRecordView> {
   ScrollController scrollController = ScrollController();
 
   void _scrollToEnd() {
-    // print('scrollToEnd ${DateTime.now().millisecondsSinceEpoch}');
-    if (mounted) {
-      scrollController.jumpTo(scrollController.position.maxScrollExtent);
-    }
+    // if (mounted) {
+    //   scrollController.jumpTo(scrollController.position.maxScrollExtent);
+    // }
   }
 
   List<Widget> _listView() {
@@ -86,9 +85,9 @@ class _ChatRecordViewState extends State<ChatRecordView> {
 
     return ListView(
       controller: scrollController,
-      padding: EdgeInsets.symmetric(vertical: 15),
+      padding: const EdgeInsets.symmetric(vertical: 15),
       shrinkWrap: true,
-      // reverse: true,
+      reverse: true,
       children: _listView(),
       // children: [
       //   BubbleNormal(

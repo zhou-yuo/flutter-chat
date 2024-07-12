@@ -72,8 +72,12 @@ class _ChatPageState extends State<ChatPage> {
             child: Column(
               children: [
                 Expanded(
-                  child: ChatRecordView(
-                      controller: _recordViewCtrl, list: recordList),
+                  child: Align(
+                    // 此处为关键代码
+                    alignment: Alignment.topCenter,
+                    child: ChatRecordView(
+                        controller: _recordViewCtrl, list: recordList),
+                  ),
                 ),
                 Container(
                   width: double.infinity,
@@ -179,11 +183,13 @@ class _ChatPageState extends State<ChatPage> {
   // push list
   void pushMsg({required String text, required bool isSender}) {
     if (!mounted) return;
-    recordList.add({
+    final int index = recordList.length;
+    debugPrint('index $index');
+    recordList.insert(0, {
       "id": DateTime.now().millisecondsSinceEpoch,
       'type': 'date',
     });
-    recordList.add({
+    recordList.insert(0, {
       "id": DateTime.now().millisecondsSinceEpoch,
       'type': 'text',
       "text": text,
@@ -192,6 +198,7 @@ class _ChatPageState extends State<ChatPage> {
       "seen": false,
     });
     setState(() {});
+    debugPrint('recordlist ${recordList.toString()}');
   }
 
   Widget mediaCtrl() {
